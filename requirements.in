@@ -1,0 +1,8 @@
+django-environ
+django-storages
+django
+djangorestframework
+google-auth
+google-cloud-storage
+google-cloud-secret-manager
+mysqlclient

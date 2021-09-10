@@ -131,4 +131,11 @@ dmypy.json
 # IDEA
 .idea/
 
+# Gcloud
+cloud_sql_proxy
+.gcloudignore
+
+# MACOS
+.DS_Store
+
 

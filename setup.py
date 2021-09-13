@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import secrets
 
 # upgrade pip
 print("---------- Upgrading pip package ---------- \n")
@@ -18,4 +19,5 @@ with open(".env", "a") as f:
     f.write("DATABASE_USERNAME='dev-user'\n")
     password = input("Enter the database password: ")
     f.write("DATABASE_PASSWORD='{}'\n".format(password))
+    f.write("SECRET_KEY='{}'".format(secrets.token_urlsafe()))
     f.close()

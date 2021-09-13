@@ -2,7 +2,9 @@ django-environ
 django-storages
 django
 djangorestframework
+djangorestframework_simplejwt
 google-auth
 google-cloud-storage
 google-cloud-secret-manager
 mysqlclient
+

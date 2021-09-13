@@ -19,11 +19,16 @@ django==3.2.7
     #   -r requirements.in
     #   django-storages
     #   djangorestframework
+    #   djangorestframework-simplejwt
 django-environ==0.6.0
     # via -r requirements.in
 django-storages==1.11.1
     # via -r requirements.in
 djangorestframework==3.12.4
+    # via
+    #   -r requirements.in
+    #   djangorestframework-simplejwt
+djangorestframework-simplejwt==4.8.0
     # via -r requirements.in
 google-api-core[grpc]==2.0.1
     # via
@@ -82,6 +87,8 @@ pyasn1-modules==0.2.8
     # via google-auth
 pycparser==2.20
     # via cffi
+pyjwt==2.1.0
+    # via djangorestframework-simplejwt
 pyparsing==2.4.7
     # via packaging
 pytz==2021.1

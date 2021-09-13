@@ -14,6 +14,8 @@ https://cloud.google.com/python/django/appengine
 """
 import io
 import os
+from datetime import timedelta
+
 import environ
 
 from google.cloud import secretmanager
@@ -66,6 +68,7 @@ DJANGO_APPS = [
 
 LOCAL_APPS = [
     'core',
+    'accounts'
 ]
 
 THIRD_PARTY_APPS = [
@@ -147,3 +150,23 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Django user model
+AUTH_USER_MODEL = 'accounts.User'
+
+# rest_framework configs
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 12,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+# jwt settings
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(hours=24),
+    'USER_ID_FIELD': 'user_uuid',
+    'USER_ID_CLAIM': 'user_uuid',
+}

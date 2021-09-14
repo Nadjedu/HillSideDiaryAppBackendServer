@@ -169,4 +169,5 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(hours=24),
     'USER_ID_FIELD': 'user_uuid',
     'USER_ID_CLAIM': 'user_uuid',
+    'UPDATE_LAST_LOGIN': True,
 }

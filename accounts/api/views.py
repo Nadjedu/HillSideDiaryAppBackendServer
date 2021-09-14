@@ -16,6 +16,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
                   mixins.CreateModelMixin,
                   viewsets.GenericViewSet):
     lookup_field = "user_uuid"
+    queryset = User.objects.all()
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):

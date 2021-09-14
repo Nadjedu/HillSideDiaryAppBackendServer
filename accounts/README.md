@@ -5,11 +5,21 @@ Django uses sessions out-of-the-box but I decided to use jwt (token based authen
 
 ### User Account Creation Flow
 - Client sends a post request to `/accounts/users/` with required data.
-- Server responds with user data and a key-value pair in headers containing token data.
+- Server responds with user data and tokens in response headers.
+
+### User login Flow
+- Client sends a post request to `/accounts/token` with required data.
+- Server responds with access token and refresh token in response body.
+
+### Token Refresh
+- Client sends a post request to `/accounts/refresh` with required data.
+- Server responds with new access token in response body.
 
 #### NB:
 - Access token expires in <b>1 hour.</b>
 - Refresh token expires in <b>24 hours.</b>
+- There's no logout endpoint. Deleting tokens client side should be enough
+- Getting a new token does not invalidate old tokens.
 
 #### What does this mean?
 - Users will have to log in after 24 hours.

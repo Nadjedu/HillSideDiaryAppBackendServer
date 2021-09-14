@@ -11,17 +11,9 @@ class UserModelCreationTestCase(TestCase):
         user = User.objects.create_user(email="test@test.com", password="123")
         self.assertTrue(isinstance(user, User))
 
-    def test_create_regular_user_unsuccessful(self):
-        user = User.objects.create_user(email="test@test.com")
-        self.assertFalse(isinstance(user, User))
-
     def test_create_super_user_success(self):
         user = User.objects.create_superuser(email="test@test.com", password="123")
         self.assertTrue(isinstance(user, User))
-
-    def test_create_regular_super_user_unsuccessful(self):
-        user = User.objects.create_superuser(email="test@test.com")
-        self.assertFalse(isinstance(user, User))
 
 
 class AccountsAPITest(APITestCase):

@@ -20,6 +20,7 @@ Django uses sessions out-of-the-box but I decided to use jwt (token based authen
 - Refresh token expires in <b>24 hours.</b>
 - There's no logout endpoint. Deleting tokens client side should be enough
 - Getting a new token does not invalidate old tokens.
+- User profile can be retrieved using the `/accounts/users/me` endpoint.
 
 #### What does this mean?
 - Users will have to log in after 24 hours.

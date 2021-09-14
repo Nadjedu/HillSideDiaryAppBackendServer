@@ -25,3 +25,9 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         exclude = ['user_permissions', 'groups', 'password']
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'phone_number', 'email']

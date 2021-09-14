@@ -7,13 +7,14 @@ from django.db import transaction
 
 from .serializers import UserCreateSerializer, UserRetrieveSerializer
 from ..models import User
-from .permissions import CanRetrieveUser
+from .permissions import CanActionUser
 
 logger = logging.getLogger(__name__)
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
                   mixins.CreateModelMixin,
+                  mixins.UpdateModelMixin,
                   viewsets.GenericViewSet):
     lookup_field = "user_uuid"
 
@@ -47,8 +48,8 @@ class UserViewSet(mixins.RetrieveModelMixin,
     def get_permissions(self):
         permissions = []
 
-        if self.action == "retrieve":
-            permissions = [IsAuthenticated, CanRetrieveUser]
+        if self.action == "retrieve" or self.action == "update":
+            permissions = [IsAuthenticated, CanActionUser]
         if self.action == "create":
             permissions = [AllowAny]
 

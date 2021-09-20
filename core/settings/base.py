@@ -68,7 +68,8 @@ DJANGO_APPS = [
 
 LOCAL_APPS = [
     'core',
-    'accounts'
+    'accounts',
+    'diary_card_entities'
 ]
 
 THIRD_PARTY_APPS = [

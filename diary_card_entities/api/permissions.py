@@ -13,3 +13,10 @@ class CanRetrieveEmotion(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return obj.patient_uuid == request.user or request.user.is_staff
+
+
+class CanActionDiaryEntity(permissions.BasePermission):
+    message = "User does not have permission to action diary entity."
+
+    def has_object_permission(self, request, view, obj):
+        return obj.patient_uuid == request.user

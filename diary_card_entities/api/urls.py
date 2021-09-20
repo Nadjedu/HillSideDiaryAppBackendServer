@@ -1,11 +1,12 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .views import SkillViewSet, TargetViewSet
+from .views import SkillViewSet, TargetViewSet, EmotionViewSet
 
 router = routers.SimpleRouter()
 router.register(r'skills', SkillViewSet, basename='skill')
 router.register(r'targets', TargetViewSet, basename='target')
+router.register(r'emotions', EmotionViewSet, basename='emotion')
 
 urlpatterns = [
     path('', include(router.urls)),

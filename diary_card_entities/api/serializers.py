@@ -82,5 +82,5 @@ class DiaryEntrySerializer(serializers.ModelSerializer):
         return entity
 
     class Meta:
-        models = DiaryEntry
+        model = DiaryEntry
         fields = "__all__"

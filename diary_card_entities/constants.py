@@ -1,4 +1,4 @@
-from enum import Enum
+from django.db import models
 
 skills_categories = (
     ("Mindfulness", "Mindfulness"),
@@ -15,19 +15,15 @@ target_categories = (
 )
 
 
-class Choices(Enum):
+class AttributeChoices(models.TextChoices):
     """
         This class allows modularity and defines a single source of truth
         for choices constants.
 
         TO-DO: Add rest of choices to this class
     """
-    ATTRIBUTE_SKILL = "skill"
-    ATTRIBUTE_TARGET = "target"
-    ATTRIBUTE_EMOTION = "emotion"
+    ATTRIBUTE_SKILL = ("skill", "skill")
+    ATTRIBUTE_TARGET = ("target", "target")
+    ATTRIBUTE_EMOTION = ("emotion", "emotion")
 
-    diary_attribute_choices = (
-        (ATTRIBUTE_SKILL, "skill"),
-        (ATTRIBUTE_TARGET, "skill"),
-        (ATTRIBUTE_EMOTION, "skill")
-    )
+

@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from accounts.models import User
-from .constants import skills_categories, target_categories, Choices
+from .constants import skills_categories, target_categories, AttributeChoices
 
 
 class Skill(models.Model):
@@ -69,7 +69,7 @@ class DiaryAttribute(models.Model):
     attribute_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     related_attribute_uuid = models.UUIDField(null=True, help_text="related entity uuid")
     diary_entity = models.ForeignKey(DiaryEntry, on_delete=models.SET_NULL, null=True)
-    type = models.CharField(max_length=40, choices=Choices.diary_attribute_choices)
+    type = models.CharField(max_length=40, choices=AttributeChoices.choices)
     rating = models.PositiveSmallIntegerField(null=True, validators=[MinValueValidator(1), MaxValueValidator(5)])
     date_created = models.DateTimeField(default=timezone.now, null=True)
     date_modified = models.DateTimeField(null=True)

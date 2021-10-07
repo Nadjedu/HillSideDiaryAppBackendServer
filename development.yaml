@@ -1,0 +1,6 @@
+runtime: python39
+entrypoint: gunicorn -b :$PORT core.wsgi
+
+env_variables:
+  DJANGO_SETTINGS_MODULE: "core.settings.development"
+  CLOUD_SQL_URL: "/cloudsql/hillside-app:us-east1:hillside-1"

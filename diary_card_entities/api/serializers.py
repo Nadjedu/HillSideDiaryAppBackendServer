@@ -119,7 +119,7 @@ class DiaryEntrySerializer(serializers.ModelSerializer):
 class SudScoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = SudScore
-        fields = "score"
+        fields = "__all__"
 
     def create(self, validated_data):
         sud_score = super(SudScoreSerializer, self).create(validated_data)

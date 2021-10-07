@@ -1,6 +1,6 @@
 from .base import *
 
-ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]', 'hillside-app.ue.r.appspot.com']
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -15,6 +15,9 @@ DATABASES = {
             'PORT': '5432',
     }
 }
+
+if os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+    DATABASES["default"]["HOST"] = env('CLOUD_SQL_URL', default='')
 
 # Allows logging to the console
 LOGGING = {

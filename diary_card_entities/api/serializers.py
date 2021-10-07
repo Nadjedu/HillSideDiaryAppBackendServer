@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Skill, Target
+from ..models import Skill, Target, Emotion
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -32,3 +32,17 @@ class TargetSerializer(serializers.ModelSerializer):
 
         target.save()
         return target
+
+
+class EmotionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Emotion
+        fields = "__all__"
+
+    def create(self, validated_data):
+        emotion = super(EmotionSerializer, self).create(validated_data)
+        emotion.active = True
+        emotion.creator_uuid = self.context["request"].user
+        emotion.save()
+
+        return emotion

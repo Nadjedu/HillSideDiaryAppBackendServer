@@ -11,5 +11,5 @@ router.register(r'entries', DiaryEntryViewSet, basename='entry')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('sud-scores', SudScoreCreateAPIView.as_view(), name='sud-scores')
+    path('sud-scores/', SudScoreCreateAPIView.as_view(), name='sud-scores')
 ]

@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from accounts.models import User
-from .constants import skills_categories, target_categories, AttributeChoices
+from .constants import AttributeChoices, SkillChoices, TargetChoices
 
 
 class Skill(models.Model):
@@ -16,10 +16,24 @@ class Skill(models.Model):
     date_added = models.DateTimeField(default=timezone.now, null=True)
     date_modified = models.DateTimeField(null=True)
     active = models.BooleanField(default=True)
-    category = models.CharField(choices=skills_categories, null=True, max_length=100)
+    category = models.CharField(choices=SkillChoices.choices, null=True, max_length=100)
 
 
 class Target(models.Model):
+    """
+        is_for_all: will allow you to create a set of core targets that every user.
+        And if you want to create targets for specific users just assign the patient_uuid
+        to their uuid.
+        If you want even more fine grained permissions and groupings, django has
+        a default Group table.
+        Eg: Group.objects.get_or_create(name=<target_name>)
+        And then, you could assign users to that group.
+        This is very fine grained and will require a little bit of work on the queryset
+        returned to the user (user has permission to view a target or it's a core target
+        or target.patient_uuid = <request_user>).
+        Check: https://docs.djangoproject.com/en/3.2/topics/auth/default/#groups
+
+    """
     target_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     creator_uuid = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="Creator")
     patient_uuid = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="Patient")
@@ -28,10 +42,14 @@ class Target(models.Model):
     date_added = models.DateTimeField(default=timezone.now, null=True)
     date_modified = models.DateTimeField(null=True)
     active = models.BooleanField(default=True)
-    category = models.CharField(choices=target_categories, null=True, max_length=100)
+    is_for_all = models.BooleanField(default=False)
+    category = models.CharField(choices=TargetChoices.choices, null=True, max_length=100)
 
 
 class Emotion(models.Model):
+    """
+        is_for_all: check targets comment
+    """
     emotion_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     creator_uuid = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="emotion_creator")
     patient_uuid = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="emotion_patient")
@@ -40,6 +58,7 @@ class Emotion(models.Model):
     date_added = models.DateTimeField(default=timezone.now, null=True)
     date_modified = models.DateTimeField(null=True)
     active = models.BooleanField(default=True)
+    is_for_all = models.BooleanField(default=False)
 
 
 class DiaryEntry(models.Model):
@@ -48,6 +67,10 @@ class DiaryEntry(models.Model):
     date_added = models.DateTimeField(default=timezone.now, null=True)
     date_modified = models.DateTimeField(null=True)
     note = models.CharField(max_length=5000, null=True)
+
+    @property
+    def attributes(self):
+        return self.diaryattribute_set.all()
 
 
 class SudScore(models.Model):

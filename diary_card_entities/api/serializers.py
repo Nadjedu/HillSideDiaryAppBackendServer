@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Skill, Target, Emotion, DiaryAttribute, DiaryEntry
+from ..models import Skill, Target, Emotion, DiaryAttribute, DiaryEntry, SudScore
 from ..utils import validate_attribute_key
 
 
@@ -84,3 +84,15 @@ class DiaryEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = DiaryEntry
         fields = "__all__"
+
+
+class SudScoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SudScore
+        fields = "score"
+
+    def create(self, validated_data):
+        sud_score = super(SudScoreSerializer, self).create(validated_data)
+        sud_score.patient_uuid = self.context["request"].user
+        sud_score.save()
+        return sud_score

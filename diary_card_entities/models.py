@@ -47,8 +47,14 @@ class DiaryEntry(models.Model):
     patient_uuid = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date_added = models.DateTimeField(default=timezone.now, null=True)
     date_modified = models.DateTimeField(null=True)
-    sud_score = models.SmallIntegerField(null=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
     note = models.CharField(max_length=5000, null=True)
+
+
+class SudScore(models.Model):
+    score_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
+    patient_uuid = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    date_added = models.DateTimeField(default=timezone.now, null=True)
+    score = models.PositiveSmallIntegerField(null=True, validators=[MaxValueValidator(100)])
 
 
 class DiaryAttribute(models.Model):

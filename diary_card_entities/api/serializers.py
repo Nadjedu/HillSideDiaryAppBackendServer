@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from ..models import Skill, Target, Emotion
+from ..models import Skill, Target, Emotion, DiaryAttribute, DiaryEntry
+from ..utils import validate_attribute_key
 
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -46,3 +47,40 @@ class EmotionSerializer(serializers.ModelSerializer):
         emotion.save()
 
         return emotion
+
+
+class DiaryAttributeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiaryAttribute
+        fields = "__all__"
+        extra_kwargs = {
+            "type": {"required": True},
+            "related_attribute_uuid": {"required": True}
+        }
+
+    def create(self, validated_data):
+        # gotcha: no need to check for None objects, etc. Extra kwargs above will force super class to do that
+        validate_attribute_key(validated_data.get("type"), validated_data.get("related_attribute_uuid"))
+        return super(DiaryAttributeSerializer, self).create(validated_data)
+
+
+class DiaryEntrySerializer(serializers.ModelSerializer):
+    attributes = DiaryAttributeSerializer(many=True, required=False)
+
+    def get_attributes(self, obj):
+        """
+        gotcha: Super class will look for method get_attributes() and assign the value to <attributes>
+        :return all attributes related to the diary entity instance.
+        """
+        # gotcha: <instance>.<model_name>_set.all() is a reverse relationship accessor
+        return DiaryAttributeSerializer(obj.diaryattributes_set.all(), many=True)
+
+    def create(self, validated_data):
+        entity = super(DiaryEntrySerializer, self).create(validated_data)
+        entity.patient_uuid = self.context["request"].user
+        entity.save()
+        return entity
+
+    class Meta:
+        model = DiaryEntry
+        fields = "__all__"

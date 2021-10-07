@@ -1,9 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
-from .serializers import SkillSerializer, TargetSerializer, EmotionSerializer
-from ..models import Skill, Target, Emotion
-from .permissions import CanActionTarget, CanRetrieveEmotion
+from .serializers import SkillSerializer, TargetSerializer, EmotionSerializer, DiaryEntrySerializer
+from ..models import Skill, Target, Emotion, DiaryEntry
+from .permissions import CanActionTarget, CanRetrieveEmotion, CanActionDiaryEntity
 
 
 class SkillViewSet(viewsets.ModelViewSet):
@@ -55,5 +55,24 @@ class EmotionViewSet(viewsets.ModelViewSet):
             permissions = [IsAuthenticated, IsAdminUser]
         else:
             permissions = [IsAuthenticated, CanRetrieveEmotion]
+
+        return [permission() for permission in permissions]
+
+
+class DiaryEntryViewSet(viewsets.ModelViewSet):
+    lookup_field = "entity_uuid"
+    serializer_class = DiaryEntrySerializer
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return DiaryEntry.objects.all()
+
+        return DiaryEntry.objects.filter(patient_uuid=self.request.user)
+
+    def get_permissions(self):
+        if self.action == "retrieve" or self.action == "list":
+            permissions = [IsAuthenticated, IsAdminUser | CanActionDiaryEntity]
+        else:
+            permissions = [IsAuthenticated, CanActionDiaryEntity]
 
         return [permission() for permission in permissions]

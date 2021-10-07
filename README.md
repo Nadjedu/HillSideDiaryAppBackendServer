@@ -32,6 +32,15 @@ You're done :tada:
 * Code review
 * Other guidelines
 
+### Future State Specs ###
+1. Add user accounts managemennt workflows (password change, password reset, email backend).
+   * For email backend, preferred way will be through a third-party email provider (sendgrid, etc)
+   * For password related workflow, preferred way will be through a library (DRY)
+2. Restrict network access to cloud SQL instance.
+3. Create an admin portal.
+4. Add a CI/CD pipeline.
+5. Add a custom domain to the cloud service.
+
 ### Who do I talk to? ###
 
 * Nana Adjedu, Hugo Olcese, Ackerley Colin, Cooley Nick, Hull Allen, Xia Sally

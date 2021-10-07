@@ -17,10 +17,13 @@ charset-normalizer==2.0.4
 django==3.2.7
     # via
     #   -r requirements.in
+    #   django-filter
     #   django-storages
     #   djangorestframework
     #   djangorestframework-simplejwt
 django-environ==0.6.0
+    # via -r requirements.in
+django-filter==21.1
     # via -r requirements.in
 django-storages==1.11.1
     # via -r requirements.in

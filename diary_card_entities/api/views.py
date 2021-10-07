@@ -1,4 +1,5 @@
 from rest_framework import viewsets, generics
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from .serializers import SkillSerializer, TargetSerializer, EmotionSerializer, DiaryEntrySerializer, SudScoreSerializer
@@ -30,13 +31,13 @@ class SkillViewSet(viewsets.ModelViewSet):
 class TargetViewSet(viewsets.ModelViewSet):
     lookup_field = "target_uuid"
     serializer_class = TargetSerializer
-    permission_classes = [IsAuthenticated, CanActionTarget]
+    permission_classes = [IsAuthenticated, CanActionTarget | IsAdminUser]
 
     def get_queryset(self):
         if self.request.user.is_staff:
             return Target.objects.all()
 
-        return Target.objects.filter(patient_uuid=self.request.user)
+        return Target.objects.filter(patient_uuid=self.request.user) | Target.objects.filter(is_for_all=True)
 
 
 class EmotionViewSet(viewsets.ModelViewSet):
@@ -47,14 +48,14 @@ class EmotionViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return Emotion.objects.all()
 
-        return Emotion.objects.filter(patient_uuid=self.request.user)
+        return Emotion.objects.filter(patient_uuid=self.request.user) | Emotion.objects.filter(is_for_all=True)
 
     def get_permissions(self):
         if self.action == "create" or self.action == "update" or self.action == "delete" or \
                 self.action == "partial_update":
             permissions = [IsAuthenticated, IsAdminUser]
         else:
-            permissions = [IsAuthenticated, CanRetrieveEmotion]
+            permissions = [IsAuthenticated, CanRetrieveEmotion | IsAdminUser]
 
         return [permission() for permission in permissions]
 
@@ -62,12 +63,22 @@ class EmotionViewSet(viewsets.ModelViewSet):
 class DiaryEntryViewSet(viewsets.ModelViewSet):
     lookup_field = "entity_uuid"
     serializer_class = DiaryEntrySerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["date_added"] # allows filtering by dd/mm/yyyy
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return DiaryEntry.objects.all()
+        month = self.request.query_params.get("month")
+        year = self.request.query_params.get("year")
+        qs = DiaryEntry.objects.all()
 
-        return DiaryEntry.objects.filter(patient_uuid=self.request.user)
+        # allows filtering by mm/yyyy
+        if month and year:
+            qs = qs.filter(date_added__month=month, date_added__year=year)
+
+        if self.request.user.is_staff:
+            return qs
+
+        return qs.filter(patient_uuid=self.request.user)
 
     def get_permissions(self):
         if self.action == "retrieve" or self.action == "list":
@@ -82,3 +93,4 @@ class SudScoreCreateAPIView(generics.CreateAPIView):
     lookup_field = "score_uuid"
     serializer_class = SudScoreSerializer
     queryset = SudScore.objects.all()
+    permission_classes = [IsAuthenticated]

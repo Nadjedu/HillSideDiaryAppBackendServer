@@ -1,29 +1,25 @@
 from django.db import models
 
-skills_categories = (
-    ("Mindfulness", "Mindfulness"),
-    ("Interpersonal Effectiveness", "Interpersonal Effectiveness"),
-    ("Emotion Regulation", "Emotion Regulation"),
-    ("Distress Tolerance", "Distress Tolerance"),
-    ("Validation", "Validation")
-)
-
-target_categories = (
-    ("Thoughts/Urges", "Thoughts/Urges"),
-    ("Emotions/Feelings", "Emotions/Feelings"),
-    ("Actions/Behaviors", "Actions/Behaviors")
-)
+"""
+    I guess we could say these are Django's version of enums.
+"""
 
 
 class AttributeChoices(models.TextChoices):
-    """
-        This class allows modularity and defines a single source of truth
-        for choices constants.
-
-        TO-DO: Add rest of choices to this class
-    """
     ATTRIBUTE_SKILL = ("skill", "skill")
     ATTRIBUTE_TARGET = ("target", "target")
     ATTRIBUTE_EMOTION = ("emotion", "emotion")
 
 
+class SkillChoices(models.TextChoices):
+    SKILL_MINDFULNESS = ("Mindfulness", "Mindfulness")
+    SKILL_INTERPERSONAL_EFFECTIVENESS = ("Interpersonal Effectiveness", "Interpersonal Effectiveness")
+    SKILL_EMOTION_REGULATION = ("Emotion Regulation", "Emotion Regulation")
+    SKILL_DISTRESS_TOLERANCE = ("Distress Tolerance", "Distress Tolerance")
+    SKILL_VALIDATION = ("Validation", "Validation")
+
+
+class TargetChoices(models.TextChoices):
+    TARGET_THOUGHTS_URGES = ("Thoughts/Urges", "Thoughts/Urges")
+    TARGET_EMOTIONS_FEELINGS = ("Emotions/Feelings", "Emotions/Feelings")
+    TARGET_ACTIONS_BEHAVIOR = ("Actions/Behaviors", "Actions/Behaviors")

@@ -21,3 +21,9 @@ class CanActionDiaryEntity(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.patient_uuid == request.user
 
+
+class CanActionSudScore(permissions.BasePermission):
+    message = "User does not have permission to action sud score."
+
+    def has_object_permission(self, request, view, obj):
+        return obj.patient_uuid == request.user

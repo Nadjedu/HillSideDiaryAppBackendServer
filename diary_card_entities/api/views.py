@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from .serializers import SkillSerializer, TargetSerializer, EmotionSerializer, DiaryEntrySerializer, SudScoreSerializer
 from ..models import Skill, Target, Emotion, DiaryEntry, SudScore
-from .permissions import CanActionTarget, CanRetrieveEmotion, CanActionDiaryEntity
+from .permissions import CanActionTarget, CanRetrieveEmotion, CanActionDiaryEntity, CanActionSudScore
 
 
 class SkillViewSet(viewsets.ModelViewSet):
@@ -89,8 +89,8 @@ class DiaryEntryViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permissions]
 
 
-class SudScoreCreateAPIView(generics.CreateAPIView):
+class SudScoreViewSet(viewsets.ModelViewSet):
     lookup_field = "score_uuid"
     serializer_class = SudScoreSerializer
     queryset = SudScore.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CanActionSudScore | IsAdminUser]

@@ -4,7 +4,7 @@ from django.db import transaction
 
 from ..models import Skill, Target, Emotion, DiaryAttribute, DiaryEntry, SudScore
 from ..utils import validate_attribute_key
-
+from ..constants import AttributeChoices
 
 class EditableEntitySerializer(serializers.ModelSerializer):
 
@@ -91,7 +91,19 @@ class DiaryAttributeSerializer(serializers.ModelSerializer):
 
 
 class DiaryEntrySerializer(serializers.ModelSerializer):
-    attributes = DiaryAttributeSerializer(many=True, required=False)
+    attributes = DiaryAttributeSerializer(many=True, required=False, write_only=True)
+    skills = serializers.SerializerMethodField()
+    targets = serializers.SerializerMethodField()
+    emotions = serializers.SerializerMethodField()
+
+    def get_skills(self, obj):
+        return DiaryAttributeSerializer(obj.attributes.filter(type=AttributeChoices.ATTRIBUTE_SKILL), many=True).data
+
+    def get_targets(self, obj):
+        return DiaryAttributeSerializer(obj.attributes.filter(type=AttributeChoices.ATTRIBUTE_TARGET), many=True).data
+
+    def get_emotions(self, obj):
+        return DiaryAttributeSerializer(obj.attributes.filter(type=AttributeChoices.ATTRIBUTE_EMOTION), many=True).data
 
     @transaction.atomic
     def create(self, validated_data):

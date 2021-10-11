@@ -64,12 +64,12 @@ class DiaryEntryViewSet(viewsets.ModelViewSet):
     lookup_field = "entity_uuid"
     serializer_class = DiaryEntrySerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["date_added"] # allows filtering by dd/mm/yyyy
+    filterset_fields = ["date_added"]  # allows filtering by dd/mm/yyyy
 
     def get_queryset(self):
         month = self.request.query_params.get("month")
         year = self.request.query_params.get("year")
-        qs = DiaryEntry.objects.all()
+        qs = DiaryEntry.objects.all().prefetch_related("diaryattribute_set")
 
         # allows filtering by mm/yyyy
         if month and year:

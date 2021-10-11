@@ -66,7 +66,7 @@ class DiaryEntry(models.Model):
     patient_uuid = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     date_added = models.DateTimeField(default=timezone.now, null=True)
     date_modified = models.DateTimeField(null=True)
-    mood_score = models.PositiveSmallIntegerField(null=True, validators=[MaxValueValidator(6)])
+    mood_score = models.PositiveSmallIntegerField(null=True, validators=[MaxValueValidator(6)], default=6)
     note = models.CharField(max_length=5000, null=True)
 
     @property

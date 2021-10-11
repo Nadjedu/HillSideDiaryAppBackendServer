@@ -61,7 +61,7 @@ class EmotionViewSet(viewsets.ModelViewSet):
 
 
 class DiaryEntryViewSet(viewsets.ModelViewSet):
-    lookup_field = "entity_uuid"
+    lookup_field = "entry_uuid"
     serializer_class = DiaryEntrySerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["date_added"]  # allows filtering by dd/mm/yyyy

@@ -45,7 +45,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
     def get_serializer_class(self):
         if self.action == "retrieve" or self.action == "me":
             return UserRetrieveSerializer
-        if self.action == "update":
+        if self.action == "update" or self.action == "partial_update":
             return UserUpdateSerializer
 
         return UserCreateSerializer
